@@ -32,7 +32,10 @@ def vocab_config(vocab_config):
   config.cap = vocab_config['cap']
   config.dim = vocab_config['dim']
   config.size = vocab_config['size']
-  config.vocab_file = FLAGS.results_path + vocab_config['vocab_file']
+  if config.mode == 'fixed':
+    config.vocab_file = FLAGS.Glove_path
+  else:
+    config.vocab_file = FLAGS.results_path + vocab_config['vocab_file']
   config.embs_file = FLAGS.results_path + vocab_config['embs_file']
   return config
 
@@ -44,6 +47,7 @@ def model_config(mdl_config):
   config.bidir = mdl_config['bidir']
   config.case_sensitive = mdl_config['case_sensitive']
   config.checkpoint_path = FLAGS.results_path + mdl_config['checkpoint_path']
+  print(config.checkpoint_path)
   config.vocab_configs = []
   for vocab_configs in mdl_config['vocab_configs']:
     config.vocab_configs.append(vocab_config(vocab_configs))

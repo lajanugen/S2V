@@ -53,6 +53,7 @@ tf.flags.DEFINE_boolean("use_norm", False,
 tf.flags.DEFINE_integer("sequence_length", 30, "Max sentence length considered")
 tf.flags.DEFINE_string("model_config", None, "Model configuration json")
 tf.flags.DEFINE_string("results_path", None, "Model results path")
+tf.flags.DEFINE_string("Glove_path", None, "Path to Glove dictionary")
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
