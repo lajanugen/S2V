@@ -9,13 +9,9 @@ The data preparation, vocabulary expansion and evaluation scripts have been adop
 Other code files have been modified and re-structured with changes specific to our model.
 
 ### Contents
-
 * [Model configuration files](#model-configuration-files)
-
 * [Pretrained Models](#pre-trained-models)
-
 * [Training a Model](#training-a-model)
-
 * [Evaluating a Model](#evaluating-a-model)
 
 ## Model configuration files
