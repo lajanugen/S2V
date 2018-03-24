@@ -1,37 +1,18 @@
 # Quick-Thought Vectors
 
 This is a TensorFlow implementation accompanying our paper
-
 Lajanugen Logeswaran, Honglak Lee. 
-An efficient framework for learning sentence representations. In ICLR, 2018.
+[An efficient framework for learning sentence representations](https://arxiv.org/pdf/1803.02893.pdf). In ICLR, 2018.
 
 This codebase is based on Chris Shallue's [Tensorflow implementation](https://github.com/tensorflow/models/tree/master/research/skip_thoughts) of the SkipThought model. 
 The data preparation, vocabulary expansion and evaluation scripts have been adopted with minor changes.
 Other code files have been modified and re-structured with changes specific to our model.
 
 ### Contents
-#* [Model Overview](#model-overview)
-#* [Getting Started](#getting-started)
-#    * [Install Required Packages](#install-required-packages)
-#    * [Download Pretrained Models (Optional)](#download-pretrained-models-optional)
+#* [Model configuration files](#model-configuration-files)
+#* [Pre-trained Models](#pre--trained-models)
 #* [Training a Model](#training-a-model)
-#    * [Prepare the Training Data](#prepare-the-training-data)
-#    * [Run the Training Script](#run-the-training-script)
-#* [Expanding the Vocabulary](#expanding-the-vocabulary)
-#    * [Overview](#overview)
-#    * [Preparation](#preparation)
-#    * [Run the Vocabulary Expansion Script](#run-the-vocabulary-expansion-script)
 #* [Evaluating a Model](#evaluating-a-model)
-#    * [Overview](#overview-1)
-#    * [Preparation](#preparation-1)
-#    * [Run the Evaluation Tasks](#run-the-evaluation-tasks)
-#* [Encoding Sentences](#encoding-sentences)
-
-
-## Pre-trained Models
-Models trained on the above datasets can be downloaded from [https://bit.ly/2DQTHXr](https://bit.ly/2DQTHXr).
-These models are the multi-channel variations (MC-QT) discussed in the paper.
-If you are interested in evaluating these models or using them in your tasks, jump to [Evaluation on downstream tasks](#evaluation-on-downstream-tasks).
 
 ## Model configuration files
 
@@ -65,6 +46,13 @@ Vocabulary mode can be one of *fixed*, *trained* or *expand*. These modes repres
 `checkpoint_path` and `vocab_file` have to be specified only for evaluation.
 
 For concatenating representations from multiple sentence encoders at evaluation time, the json file can be a list of multiple encoder specifications. See `model_configs/BC/eval.json` for an example. 
+
+
+## Pre-trained Models
+Models trained on the BookCorpus and UMBC datasets can be downloaded from [https://bit.ly/2DQTHXr](https://bit.ly/2DQTHXr).
+These models are the multi-channel variations (MC-QT) discussed in the paper.
+If you are interested in evaluating these models or using them in your tasks, jump to [Evaluation on downstream tasks](#evaluation-on-downstream-tasks).
+
 
 ## Training a Model
 
@@ -130,4 +118,19 @@ You will need to clone or download the [skip-thoughts GitHub repository](https:/
 Set the `DATA` variable to the directory containing data for the downstream tasks. 
 See the above repository for further details regarding downloading and setting up the data.
 
+## Reference
 
+If you found our code useful, please cite us [1](https://arxiv.org/pdf/1803.02893.pdf).
+
+```
+@inproceedings{
+logeswaran2018an,
+  title={An efficient framework for learning sentence representations},
+  author={Lajanugen Logeswaran and Honglak Lee},
+  booktitle={International Conference on Learning Representations},
+  year={2018},
+  url={https://openreview.net/forum?id=rJvJXZb0W},
+}
+```
+
+Contact: [llajan@umich.edu](mailto:llajan@umich.edu)
