@@ -49,10 +49,10 @@ import tensorflow as tf
 
 FLAGS = tf.flags.FLAGS
 
-tf.flags.DEFINE_string("skip_thoughts_model", None,
+tf.flags.DEFINE_string("model", None,
                        "Checkpoint file or directory containing a checkpoint "
                        "file.")
-tf.flags.DEFINE_string("skip_thoughts_vocab", None,
+tf.flags.DEFINE_string("model_vocab", None,
                        "Path to vocabulary file containing a list of newline-"
                        "separated words where the word id is the "
                        "corresponding 0-based index in the file.")
@@ -64,7 +64,6 @@ tf.flags.DEFINE_boolean("transfer_embs", False, "Directly transfer embeddings")
 tf.flags.DEFINE_string("transfer_embs_path", "", "Embeddings path for direct transfer")
 tf.flags.DEFINE_string("word_emb_tensor", "word_embedding", "Name of word embedding tensor")
 tf.flags.DEFINE_integer("vocab_size", 50001, "Vocabulary size")
-tf.flags.DEFINE_boolean("cap", False, "cap vocab")
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -100,7 +99,7 @@ def _load_skip_thoughts_embeddings(checkpoint_path):
   return word_embedding
 
 
-def _load_vocabulary(filename, cap=False):
+def _load_vocabulary(filename):
   """Loads a vocabulary file.
 
   Args:
@@ -113,8 +112,6 @@ def _load_vocabulary(filename, cap=False):
   vocab = collections.OrderedDict()
   with tf.gfile.GFile(filename, mode="r") as f:
     for i, line in enumerate(f):
-      if cap and i >= FLAGS.vocab_size:
-        break
       word = line.decode("utf-8").strip()
       assert word not in vocab, "Attempting to add word twice: %s" % word
       vocab[word] = i
@@ -122,13 +119,13 @@ def _load_vocabulary(filename, cap=False):
   return vocab
 
 
-def _expand_vocabulary(skip_thoughts_emb, skip_thoughts_vocab, word2vec):
+def _expand_vocabulary(skip_thoughts_emb, model_vocab, word2vec):
   """Runs vocabulary expansion on a skip-thoughts model using a word2vec model.
 
   Args:
-    skip_thoughts_emb: A numpy array of shape [skip_thoughts_vocab_size,
+    skip_thoughts_emb: A numpy array of shape [model_vocab_size,
         skip_thoughts_embedding_dim].
-    skip_thoughts_vocab: A dictionary of word to id.
+    model_vocab: A dictionary of word to id.
     word2vec: An instance of gensim.models.Word2Vec.
 
   Returns:
@@ -136,12 +133,12 @@ def _expand_vocabulary(skip_thoughts_emb, skip_thoughts_vocab, word2vec):
   """
   # Find words shared between the two vocabularies.
   tf.logging.info("Finding shared words")
-  shared_words = [w for w in word2vec.vocab if w in skip_thoughts_vocab]
+  shared_words = [w for w in word2vec.vocab if w in model_vocab]
 
   # Select embedding vectors for shared words.
   tf.logging.info("Selecting embeddings for %d shared words", len(shared_words))
   shared_st_emb = skip_thoughts_emb[[
-      skip_thoughts_vocab[w] for w in shared_words
+      model_vocab[w] for w in shared_words
   ]]
   shared_w2v_emb = word2vec[shared_words]
 
@@ -159,8 +156,8 @@ def _expand_vocabulary(skip_thoughts_emb, skip_thoughts_vocab, word2vec):
       w_emb = model.predict(word2vec[w].reshape(1, -1))
       combined_emb[w] = w_emb.reshape(-1)
 
-  for w in skip_thoughts_vocab:
-    combined_emb[w] = skip_thoughts_emb[skip_thoughts_vocab[w]]
+  for w in model_vocab:
+    combined_emb[w] = skip_thoughts_emb[model_vocab[w]]
 
   tf.logging.info("Created expanded vocabulary of %d words", len(combined_emb))
 
@@ -168,20 +165,12 @@ def _expand_vocabulary(skip_thoughts_emb, skip_thoughts_vocab, word2vec):
 
 
 def main(unused_argv):
-  #if not FLAGS.skip_thoughts_model:
-  #  raise ValueError("--skip_thoughts_model is required.")
-  #if not FLAGS.skip_thoughts_vocab:
-  #  raise ValueError("--skip_thoughts_vocab is required.")
-  #if not FLAGS.word2vec_model:
-  #  raise ValueError("--word2vec_model is required.")
-  #if not FLAGS.output_dir:
-  #  raise ValueError("--output_dir is required.")
 
   if not tf.gfile.IsDirectory(FLAGS.output_dir):
     tf.gfile.MakeDirs(FLAGS.output_dir)
 
   # Load the skip-thoughts embeddings and vocabulary.
-  skip_thoughts_emb = _load_skip_thoughts_embeddings(FLAGS.skip_thoughts_model)
+  skip_thoughts_emb = _load_skip_thoughts_embeddings(FLAGS.model)
 
   if FLAGS.transfer_embs:
     unk_vec = skip_thoughts_emb[[0]]
@@ -193,20 +182,18 @@ def main(unused_argv):
     tf.logging.info("Wrote embeddings file to %s", embeddings_file)
 
     with open(os.path.join(FLAGS.output_dir, FLAGS.word_emb_tensor + FLAGS.inout + ".txt"), 'w') as f:
-      with open(FLAGS.skip_thoughts_vocab, 'r') as g:
+      with open(FLAGS.model_vocab, 'r') as g:
         f.write(g.read().decode("utf-8"))
 
   else:
-    skip_thoughts_vocab = _load_vocabulary(FLAGS.skip_thoughts_vocab,
-	    cap=FLAGS.cap)
-        #cap=(FLAGS.word_emb_tensor == "word_embedding_rand"))
+    model_vocab = _load_vocabulary(FLAGS.model_vocab)
 
     # Load the Word2Vec model.
     word2vec = gensim.models.KeyedVectors.load_word2vec_format(
         FLAGS.word2vec_model, binary=True)
 
     # Run vocabulary expansion.
-    embedding_map = _expand_vocabulary(skip_thoughts_emb, skip_thoughts_vocab,
+    embedding_map = _expand_vocabulary(skip_thoughts_emb, model_vocab,
                                        word2vec)
 
     # Save the output.

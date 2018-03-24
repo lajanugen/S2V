@@ -38,11 +38,8 @@ from __future__ import print_function
 import collections
 import os
 
-
 import numpy as np
 import tensorflow as tf
-
-import special_words
 
 FLAGS = tf.flags.FLAGS
 
@@ -80,16 +77,13 @@ tf.flags.DEFINE_integer("max_sentence_length", 30,
                         "If > 0, exclude sentences whose encode, decode_pre OR"
                         "decode_post sentence exceeds this length.")
 
-tf.flags.DEFINE_boolean("add_eos", False,
-                        "Whether to add end-of-sentence ids to the output.")
-
 tf.flags.DEFINE_boolean("case_sensitive", False,
                         "Use case sensitive vocabulary")
 
-tf.flags.DEFINE_string("vocab_type", "word", "Char/word dictionary.")
-
 tf.logging.set_verbosity(tf.logging.INFO)
 
+UNK = "<unk>"
+UNK_ID = 0
 
 def _build_vocabulary(input_files):
   """Loads or builds the model vocabulary.
@@ -104,19 +98,12 @@ def _build_vocabulary(input_files):
     tf.logging.info("Loading existing vocab file.")
     vocab = collections.OrderedDict()
     with tf.gfile.GFile(FLAGS.vocab_file, mode="r") as f:
-      if FLAGS.vocab_type == 'char':
-        chars = f.read().strip()
-        vocab["<unk>"] = 0
-        for i, c in enumerate(chars):
-          vocab[c] = i + 1
-        vocab[' '] = i + 2
-      else:
-        for i, line in enumerate(f):
-          word = line.decode("utf-8").strip()
-          if word in vocab:
-            print('Duplicate word:', word)
-          #assert word not in vocab, "Attempting to add word twice: %s" % word
-          vocab[word] = i
+      for i, line in enumerate(f):
+        word = line.decode("utf-8").strip()
+        if word in vocab:
+          print('Duplicate word:', word)
+        #assert word not in vocab, "Attempting to add word twice: %s" % word
+        vocab[word] = i
     tf.logging.info("Read vocab of size %d from %s",
                     len(vocab), FLAGS.vocab_file)
     return vocab
@@ -140,11 +127,9 @@ def _build_vocabulary(input_files):
   sorted_indices = np.argsort(freqs)[::-1]
 
   vocab = collections.OrderedDict()
-  #vocab[special_words.EOS] = special_words.EOS_ID
-  vocab[special_words.UNK] = special_words.UNK_ID
+  vocab[UNK] = UNK_ID
   for w_id, w_index in enumerate(sorted_indices[0:FLAGS.num_words - 2]):
-    #vocab[words[w_index]] = w_id + 2  # 0: EOS, 1: UNK.
-    vocab[words[w_index]] = w_id + 1  # 0: EOS, 1: UNK.
+    vocab[words[w_index]] = w_id + 1  # 0: <unk>
 
   tf.logging.info("Created vocab with %d words", len(vocab))
 
@@ -171,11 +156,9 @@ def _int64_feature(value):
 def _sentence_to_ids(sentence, vocab):
   """Helper for converting a sentence (list of words) to a list of ids."""
   if FLAGS.case_sensitive:
-    ids = [vocab.get(w, special_words.UNK_ID) for w in sentence]
+    ids = [vocab.get(w, UNK_ID) for w in sentence]
   else:
-    ids = [vocab.get(w.lower(), special_words.UNK_ID) for w in sentence]
-  #if FLAGS.add_eos:
-  #  ids.append(special_words.EOS_ID)
+    ids = [vocab.get(w.lower(), UNK_ID) for w in sentence]
   return ids
 
 
@@ -211,10 +194,7 @@ def _process_input_file(filename, vocab, stats):
   processed = []
 
   for sentence_str in tf.gfile.FastGFile(filename):
-    if FLAGS.vocab_type == 'char':
-      sentence_tokens = sentence_str
-    else:
-      sentence_tokens = sentence_str.split()
+    sentence_tokens = sentence_str.split()
 
     sentence_tokens = sentence_tokens[:FLAGS.max_sentence_length]
 

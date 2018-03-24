@@ -18,9 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-#import sys
-#sys.path.insert(0, "/home/llajan/sent2vec")
-
 import tensorflow as tf
 import json
 
@@ -66,8 +63,7 @@ def main(unused_argv):
   with open(FLAGS.model_config) as json_config_file:
     model_config = json.load(json_config_file)
 
-  model_config = configuration.model_config(model_config)
-
+  model_config = configuration.model_config(model_config, mode="eval")
   model = s2v_model.s2v(model_config, mode="eval")
   model.build()
 

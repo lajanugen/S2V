@@ -22,11 +22,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-PATH_TO_SKIPTHOUGHT = '/home/llajan/sent2vec'
-
-import sys
-sys.path.insert(0, PATH_TO_SKIPTHOUGHT)
-
 from skipthoughts import eval_classification
 from skipthoughts import eval_msrp
 from skipthoughts import eval_sick
@@ -72,7 +67,7 @@ def main(unused_argv):
     model_config = [model_config]
 
   for mdl_cfg in model_config:
-    model_config = configuration.model_config(mdl_cfg)
+    model_config = configuration.model_config(mdl_cfg, mode="encode")
     encoder.load_model(model_config)
 
   if FLAGS.eval_task in ["MR", "CR", "SUBJ", "MPQA"]:

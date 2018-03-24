@@ -3,7 +3,7 @@
 	"encoder_dim": 1200,
 	"bidir": true,
 	"case_sensitive": true,
-	"checkpoint_path": "BS400-W620-S1200-case-bidir_test/train",
+	"checkpoint_path": "BS400-W620-S1200-case-bidir/train",
 	"vocab_configs": [
 	{
 		"mode": "expand",
@@ -11,8 +11,8 @@
 		"cap": false,
 		"dim": 620,
 		"size": 933761,
-		"vocab_file": "BS400-W620-S1200-case-bidir_test/exp_vocab/word_embedding",
-		"embs_file": "BS400-W620-S1200-case-bidir_test/exp_vocab/word_embedding"
+		"vocab_file": "BS400-W620-S1200-case-bidir/exp_vocab/word_embedding",
+		"embs_file": "BS400-W620-S1200-case-bidir/exp_vocab/word_embedding"
 	}
 	]
 }

@@ -12,18 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-"""Class for encoding text using a trained SkipThoughtsModel.
-
-Example usage:
-  g = tf.Graph()
-  with g.as_default():
-    encoder = SkipThoughtsEncoder(embeddings)
-    restore_fn = encoder.build_graph_from_config(model_config, checkpoint_path)
-
-  with tf.Session(graph=g) as sess:
-    restore_fn(sess)
-    skip_thought_vectors = encoder.encode(sess, data)
-"""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -37,9 +25,10 @@ import numpy as np
 import tensorflow as tf
 
 import s2v_model
-from data import special_words
 
 FLAGS = tf.flags.FLAGS
+
+UNK = "<unk>"
 
 def _pad(seq, target_len):
   """Pads a sequence of word embeddings up to the target length.
@@ -112,10 +101,8 @@ def _batch_and_pad_embs(sequences):
   return np.array(batch_embeddings), np.array(batch_mask)
 
 class s2v_encoder(object):
-  """Skip-thoughts sentence encoder."""
 
   def __init__(self, config):
-  #def __init__(self):
     """Initializes the encoder.
 
     Args:
@@ -173,9 +160,6 @@ class s2v_encoder(object):
     saver = tf.train.Saver()
     checkpoint_path = model_config.checkpoint_path
 
-    #if FLAGS.mdl_name != '':
-    #  checkpoint_path = checkpoint_path + '/' + FLAGS.mdl_name
-
     return self._create_restore_fn(checkpoint_path, saver)
 
   def build_graph_from_proto(self, graph_def_file, saver_def_file,
@@ -218,7 +202,7 @@ class s2v_encoder(object):
 
   def _word_to_embedding(self, w, word_to_embedding):
     """Returns the embedding of a word."""
-    return word_to_embedding.get(w, word_to_embedding[special_words.UNK])
+    return word_to_embedding.get(w, word_to_embedding[UNK])
 
   def _preprocess(self, data, use_eos, word_to_embedding):
     """Preprocesses text for the encoder.
@@ -233,11 +217,7 @@ class s2v_encoder(object):
     """
     preprocessed_data = []
     for item in data:
-      if not self.config.case_sensitive:
-        item = item.lower()
       tokenized = self._tokenize(item)
-      if use_eos:
-        tokenized.append(special_words.EOS)
 
       tokenized_word_embs = [self._word_to_embedding(w, word_to_embedding) for w in tokenized]
 

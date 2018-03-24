@@ -18,9 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-#import sys
-#sys.path.insert(0, "/home/llajan/sent2vec")
-
 import tensorflow as tf
 import json
 
@@ -51,6 +48,7 @@ tf.flags.DEFINE_boolean("dropout", False, "Use dropout")
 tf.flags.DEFINE_float("dropout_rate", 0.3, "Dropout rate")
 tf.flags.DEFINE_string("model_config", None, "Model configuration json")
 tf.flags.DEFINE_integer("max_ckpts", 5, "Max number of ckpts to keep")
+tf.flags.DEFINE_string("Glove_path", None, "Path to Glove dictionary")
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -63,8 +61,7 @@ def main(unused_argv):
   with open(FLAGS.model_config) as json_config_file:
     model_config = json.load(json_config_file)
 
-  model_config = configuration.model_config(model_config)
-
+  model_config = configuration.model_config(model_config, mode="train")
   tf.logging.info("Building training graph.")
   g = tf.Graph()
   with g.as_default():
@@ -76,8 +73,8 @@ def main(unused_argv):
     train_tensor = tf.contrib.slim.learning.create_train_op(
         total_loss=model.total_loss,
         optimizer=optimizer,
-        global_step=model.global_step,
         clip_gradient_norm=FLAGS.clip_gradient_norm)
+        #global_step=model.global_step,
 
     if FLAGS.max_ckpts != 5:
       saver = tf.train.Saver(max_to_keep=FLAGS.max_ckpts)
