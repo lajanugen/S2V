@@ -119,6 +119,13 @@ You will need to clone or download the [skip-thoughts GitHub repository](https:/
 Set the `DATA` variable to the directory containing data for the downstream tasks. 
 See the above repository for further details regarding downloading and setting up the data.
 
+To evaluate the pre-trained models, set the directory variables appropriately.
+Set `MDLS_PATH` to the directory of downloaded models.
+Set the configuration variable `CFG` to one of 
+* `MC-BC` (Multi-channel BookCorpus model) or 
+* `MC-UMBC` (Multi-channel BookCorpus + UMBC model)
+Set the `TASK` variable to the task of interest.
+
 ## Reference
 
 If you found our code useful, please cite us [1](https://arxiv.org/pdf/1803.02893.pdf).
