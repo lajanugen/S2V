@@ -1,7 +1,8 @@
 # Quick-Thought Vectors
 
 This is a TensorFlow implementation accompanying our paper
-Lajanugen Logeswaran, Honglak Lee. 
+
+Lajanugen Logeswaran, Honglak Lee, 
 [An efficient framework for learning sentence representations](https://arxiv.org/pdf/1803.02893.pdf). In ICLR, 2018.
 
 This codebase is based on Chris Shallue's [Tensorflow implementation](https://github.com/tensorflow/models/tree/master/research/skip_thoughts) of the SkipThought model. 
@@ -10,7 +11,7 @@ Other code files have been modified and re-structured with changes specific to o
 
 ### Contents
 * [Model configuration files](#model-configuration-files)
-* [Pretrained Models](#pre-trained-models)
+* [Pretrained Models](#pretrained-models)
 * [Training a Model](#training-a-model)
 * [Evaluating a Model](#evaluating-a-model)
 
@@ -21,20 +22,20 @@ We use json configuration files to describe models. These configuration files pr
 The description of a sentence encoder has the following format.
 ```
 {
-	"encoder": "gru",                            # Type of encoder
-	"encoder_dim": 1200,                         # Dimensionality of encoder
-	"bidir": true,                               # Uni/bi directional
-	"checkpoint_path": "",                       # Path to checkpoint
-	"vocab_configs": [                           # Configuration of vocabulary/word embeddings
-	{
-		"mode": "trained",                   # Vocabulary mode: fixed/trained/expand
-		"name": "word_embedding",
-		"dim": 620,                          # Word embedding size
-		"size": 50001,                       # Size of vocabulary
-		"vocab_file": "BC_dictionary.txt",   # Dictionary file
-		"embs_file": ""                      # Provide external embeddings file
-	}
-	]
+        "encoder": "gru",                            # Type of encoder
+        "encoder_dim": 1200,                         # Dimensionality of encoder
+        "bidir": true,                               # Uni/bi directional
+        "checkpoint_path": "",                       # Path to checkpoint
+        "vocab_configs": [                           # Configuration of vocabulary/word embeddings
+        {
+                "mode": "trained",                   # Vocabulary mode: fixed/trained/expand
+                "name": "word_embedding",
+                "dim": 620,                          # Word embedding size
+                "size": 50001,                       # Size of vocabulary
+                "vocab_file": "BC_dictionary.txt",   # Dictionary file
+                "embs_file": ""                      # Provide external embeddings file
+        }
+        ]
 }
 ```
 
@@ -83,7 +84,7 @@ The following variables have to be specified.
 * GLOVE_PATH    # Path to GloVe dictionary and embeddings
 ```
 
-Example configuration files are provided in the model\_configs folder. During training, model files will be stored under a directory named `$RESULTS\_HOME/$CFG`.
+Example configuration files are provided in the model\_configs folder. During training, model files will be stored under a directory named `$RESULTS_HOME/$CFG`.
 
 ### Training using pre-trained word embeddings
 
@@ -97,7 +98,7 @@ The code expects a numpy array file consisting of the GloVe word embeddings name
 Once the model is trained, the vocabulary used for training can be optionally expanded to a larger vocabulary using the technique proposed by the SkipThought paper. 
 The `voc_exp.sh` script can be used to perform expansion. 
 Since Word2Vec embeddings are used for expansion, you will have to download the Word2Vec model. 
-The script also makes use of the gensim library. 
+You will also need the gensim library to run the script.
 
 ### Evaluation on downstream tasks
 
