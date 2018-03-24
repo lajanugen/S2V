@@ -9,10 +9,14 @@ The data preparation, vocabulary expansion and evaluation scripts have been adop
 Other code files have been modified and re-structured with changes specific to our model.
 
 ### Contents
-#* [Model configuration files](#model-configuration-files)
-#* [Pre-trained Models](#pre--trained-models)
-#* [Training a Model](#training-a-model)
-#* [Evaluating a Model](#evaluating-a-model)
+
+* [Model configuration files](#model-configuration-files)
+
+* [Pretrained Models](#pre-trained-models)
+
+* [Training a Model](#training-a-model)
+
+* [Evaluating a Model](#evaluating-a-model)
 
 ## Model configuration files
 
@@ -48,7 +52,7 @@ Vocabulary mode can be one of *fixed*, *trained* or *expand*. These modes repres
 For concatenating representations from multiple sentence encoders at evaluation time, the json file can be a list of multiple encoder specifications. See `model_configs/BC/eval.json` for an example. 
 
 
-## Pre-trained Models
+## Pretrained Models
 Models trained on the BookCorpus and UMBC datasets can be downloaded from [https://bit.ly/2DQTHXr](https://bit.ly/2DQTHXr).
 These models are the multi-channel variations (MC-QT) discussed in the paper.
 If you are interested in evaluating these models or using them in your tasks, jump to [Evaluation on downstream tasks](#evaluation-on-downstream-tasks).
