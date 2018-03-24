@@ -1,0 +1,18 @@
+{
+	"encoder": "gru",
+	"encoder_dim": 1200,
+	"bidir": true,
+	"case_sensitive": true,
+	"checkpoint_path": "BS400-W300-S1200-Glove-BC-bidir/train",
+	"vocab_configs": [
+	{
+		"mode": "fixed",
+		"name": "word_embedding",
+		"cap": false,
+		"dim": 300,
+		"size": 2196018,
+		"vocab_file": "",
+		"embs_file": ""
+	}
+	]
+}
