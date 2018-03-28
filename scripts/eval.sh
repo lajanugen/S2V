@@ -1,24 +1,25 @@
-#TASK='TREC'
+
 TASK='SICK'
+#TASK='TREC'
 #TASK='MSRP'
 #TASK='MR'
 #TASK='CR'
 #TASK='SUBJ'
 #TASK='MPQA'
 
-MDLS_PATH="/home/llajan/b6/s2v_models/"
+MDLS_PATH="s2v_models"
 MDL_CFGS="model_configs"
-GLOVE_PATH="/home/llajan/b6/s2v_dictionaries/GloVe"
+GLOVE_PATH="dictionaries/GloVe"
 
-CFG="BS400-W620-S1200-case-bidir"
-#CFG="MC-BC"
+#CFG="BS400-W620-S1200-case-bidir"
+CFG="MC-BC"
 #CFG="MC-UMBC"
 
-SKIPTHOUGHTS="/home/llajan/sent2vec"
-DATA="/home/llajan/sent2vec/skipthoughts/data"
+SKIPTHOUGHTS="ST_dir"
+DATA="ST_data"
 
 export CUDA_VISIBLE_DEVICES=0
-export PYTHONPATH="/home/llajan/sent2vec:$PYTHONPATH"
+export PYTHONPATH="$SKIPTHOUGHTS:$PYTHONPATH"
 python src/evaluate.py \
 	--eval_task=$TASK \
 	--data_dir=$DATA \

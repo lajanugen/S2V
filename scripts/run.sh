@@ -1,12 +1,12 @@
 
-RESULTS_HOME="/mnt/brain6/scratch/llajan/s2v_results"
+RESULTS_HOME="results"
 MDL_CFGS="model_configs"
 GLOVE_PATH="dictionaries"
 
-DATA_DIR="/home/llajan/b6/s2v_data/BC/TFRecords"
+DATA_DIR="data/BC/TFRecords"
 NUM_INST=45786400 # Number of sentences
 
-#DATA_DIR="/home/llajan/b6/s2v_data/BC_UMBC/TFRecords"
+#DATA_DIR="data/BC_UMBC/TFRecords"
 #NUM_INST=174817800
 
 CFG="BS400-W620-S1200-case-bidir"

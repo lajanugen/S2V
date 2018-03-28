@@ -18,6 +18,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import os
 import tensorflow as tf
 FLAGS = tf.flags.FLAGS
 
@@ -32,13 +33,13 @@ def vocab_config(vocab_config, mode):
   config.dim = vocab_config['dim']
   config.size = vocab_config['size']
   if config.mode == 'fixed' and mode != "eval":
-    config.vocab_file = FLAGS.Glove_path + 'glove.840B.300d.txt'
-    config.embs_file = FLAGS.Glove_path + 'glove.840B.300d.npy'
+    config.vocab_file = os.path.join(FLAGS.Glove_path, 'glove.840B.300d.txt')
+    config.embs_file = os.path.join(FLAGS.Glove_path, 'glove.840B.300d.npy')
   elif mode == "encode" and config.mode == "trained":
     config.vocab_file = vocab_config['vocab_file']
   elif mode == "encode" and config.mode == "expand":
-    config.vocab_file = FLAGS.results_path + vocab_config['vocab_file']
-    config.embs_file = FLAGS.results_path + vocab_config['embs_file']
+    config.vocab_file = os.path.join(FLAGS.results_path, vocab_config['vocab_file'])
+    config.embs_file = os.path.join(FLAGS.results_path, vocab_config['embs_file'])
   return config
 
 def model_config(mdl_config, mode):
@@ -48,7 +49,7 @@ def model_config(mdl_config, mode):
   config.encoder_dim = mdl_config['encoder_dim']
   config.bidir = mdl_config['bidir']
   if mdl_config['checkpoint_path']:
-    config.checkpoint_path = FLAGS.results_path + mdl_config['checkpoint_path']
+    config.checkpoint_path = os.path.join(FLAGS.results_path, mdl_config['checkpoint_path'])
   config.vocab_configs = []
   for vocab_configs in mdl_config['vocab_configs']:
     config.vocab_configs.append(vocab_config(vocab_configs, mode))
