@@ -50,7 +50,7 @@ For concatenating representations from multiple sentence encoders at evaluation 
 
 
 ## Pretrained Models
-Models trained on the BookCorpus and UMBC datasets can be downloaded from [https://bit.ly/2DQTHXr](https://bit.ly/2DQTHXr).
+Models trained on the BookCorpus and UMBC datasets can be downloaded from [https://bit.ly/2uttm2j](https://bit.ly/2uttm2j).
 These models are the multi-channel variations (MC-QT) discussed in the paper.
 If you are interested in evaluating these models or using them in your tasks, jump to [Evaluation on downstream tasks](#evaluation-on-downstream-tasks).
 
@@ -105,13 +105,13 @@ You will also need the gensim library to run the script.
 Use the `eval.sh` script for evaluation. The following variables need to be set.
 
 ```
-* CFG           # Name of model configuration 
+* SKIPTHOUGHTS  # Path to SkipThoughts implementation
+* DATA          # Data directory for downstream tasks
 * TASK          # Name of the task
 * MDLS_PATH     # Path to model files
 * MDL_CFGS      # Path to model configuration files
+* CFG           # Name of model configuration 
 * GLOVE_PATH    # Path to GloVe dictionary and embeddings
-* SKIPTHOUGHTS  # Path to SkipThoughts implementation
-* DATA          # Data directory for downstream tasks
 ```
 
 Evaluation scripts for the downstream tasks from the authors of the SkipThought model are used. These scripts train a linear layer on top of the sentence embeddings for each task. 
