@@ -22,10 +22,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from skipthoughts import eval_classification
-from skipthoughts import eval_msrp
-from skipthoughts import eval_sick
-from skipthoughts import eval_trec
+import eval_classification
+import eval_msrp
+import eval_sick
+import eval_trec
 
 import tensorflow as tf
 import numpy as np

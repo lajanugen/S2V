@@ -23,7 +23,7 @@ export PYTHONPATH="$SKIPTHOUGHTS:$PYTHONPATH"
 python src/evaluate.py \
 	--eval_task=$TASK \
 	--data_dir=$DATA \
-	--model_config="$MDL_CFGS/$CFG/eval_noexp.json" \
+	--model_config="$MDL_CFGS/$CFG/eval.json" \
 	--results_path="$MDLS_PATH" \
 	--Glove_path=$GLOVE_PATH
 
