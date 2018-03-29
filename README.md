@@ -124,6 +124,7 @@ Set `MDLS_PATH` to the directory of downloaded models.
 Set the configuration variable `CFG` to one of 
 * `MC-BC` (Multi-channel BookCorpus model) or 
 * `MC-UMBC` (Multi-channel BookCorpus + UMBC model)
+
 Set the `TASK` variable to the task of interest.
 
 ## Reference
